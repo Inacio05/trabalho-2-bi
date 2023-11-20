@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo de Perguntas sobre Animais</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    #question-container {
+      background-color: #ff0000;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .option {
+      margin: 10px 0;
+      cursor: pointer;
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      padding: 10px;
+    }
+
+    .option:hover {
+      background-color: #990000;
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="question-container">
+  <p id="question"></p>
+
+  <div class="options">
+    <label><input type="checkbox" class="option" id="option0">A) Leão</label>
+    <label><input type="checkbox" class="option" id="option1">B) Elefante</label>
+    <label><input type="checkbox" class="option" id="option2">C) Baleia</label>
+    <label><input type="checkbox" class="option" id="option3">D) Girafa</label>
+  </div>
+</div>
+
+<button onclick="checkAnswers()">Verificar Respostas</button>
+
+<div id="result"></div>
+
+<script>
+  const questions = [
+    {
+      question: "Qual é o maior felino do mundo?",
+      options: ["Leão", "Tigre", "Jaguar", "Leopardo"],
+      correctAnswers: [1]
+    },
+    {
+      question: "Qual é o maior animal terrestre?",
+      options: ["Elefante", "Rinoceronte", "Hipopótamo", "Girafa"],
+      correctAnswers: [0]
+    },
+    {
+      question: "Qual é o maior animal marinho?",
+      options: ["Baleia Azul", "Orca", "Tubarão Branco", "Golfinho"],
+      correctAnswers: [0]
+    },
+    {
+      question: "Qual é o animal conhecido por ter o pescoço mais longo?",
+      options: ["Leão", "Girafa", "Cavalo", "Elefante"],
+      correctAnswers: [1]
+    },
+    {
+      question: "Qual é o animal símbolo da conservação ambiental?",
+      options: ["Panda", "Lobo", "Tigre", "Elefante"],
+      correctAnswers: [0]
+    }
+  ];
+
+  let currentQuestionIndex = 0;
+  let score = 0;
+
+  function showQuestion() {
+    const questionElement = document.getElementById('question');
+    const options = document.querySelectorAll('.option');
+
+    const currentQuestion = questions[currentQuestionIndex];
+    questionElement.textContent = currentQuestion.question;
+
+    for (let i = 0; i < options.length; i++) {
+      options[i].textContent = currentQuestion.options[i];
+    }
+  }
+
+  function checkAnswers() {
+    const selectedOptions = document.querySelectorAll('.option:checked');
+    const currentQuestion = questions[currentQuestionIndex];
+
+    const selectedAnswers = Array.from(selectedOptions).map(option =>
+      parseInt(option.id.slice(-1))
+    );
+
+    const correct = arraysEqual(selectedAnswers, currentQuestion.correctAnswers);
+
+    if (correct) {
+      score++;
+    }
+
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    const resultElement = document.getElementById('result');
+    resultElement.innerHTML = `<p>Você acertou ${score} de ${questions.length} perguntas.</p>`;
+  }
+
+  function arraysEqual(arr1, arr2) {
+    return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+  }
+
+  // Inicie o jogo mostrando a primeira pergunta
+  showQuestion();
+</script>
+
+</body>
+</html>
